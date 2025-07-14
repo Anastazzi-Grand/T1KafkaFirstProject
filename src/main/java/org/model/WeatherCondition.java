@@ -1,7 +1,12 @@
 package org.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Random;
 
+@JsonFormat(shape = JsonFormat.Shape.STRING)
 public enum WeatherCondition {
     SUNNY("солнечно"),
     CLOUDY("облачно"),

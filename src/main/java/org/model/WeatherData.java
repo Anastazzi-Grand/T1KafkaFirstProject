@@ -1,5 +1,8 @@
 package org.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,7 +13,13 @@ public class WeatherData {
     private String city;
     private LocalDateTime date;
 
-    public WeatherData(int temperature, WeatherCondition condition, String city, LocalDateTime date) {
+    public WeatherData() {}
+
+    @JsonCreator
+    public WeatherData(@JsonProperty("temperature") int temperature,
+                       @JsonProperty("condition") WeatherCondition condition,
+                       @JsonProperty("city") String city,
+                       @JsonProperty("date") LocalDateTime date) {
         this.temperature = temperature;
         this.condition = condition;
         this.city = city;

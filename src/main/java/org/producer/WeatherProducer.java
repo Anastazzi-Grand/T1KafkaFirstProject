@@ -1,6 +1,7 @@
 package org.producer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -49,6 +50,7 @@ public class WeatherProducer {
 
         Producer<String, String> producer = new KafkaProducer<>(props);
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         String topic = "weather-topic";
 
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -58,13 +60,13 @@ public class WeatherProducer {
                 WeatherData weatherData = generateRandomWeatherData();
                 String json = mapper.writeValueAsString(weatherData);
 
-                producer.send(new ProducerRecord<>(topic, json));
+                producer.send(new ProducerRecord<>(topic, json)).get();
                 System.out.println("Отправлено: " + weatherData);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }, 0, 2, TimeUnit.SECONDS);
+        }, 0, 3, TimeUnit.SECONDS);
 
         // Обработка остановки программы (Ctrl+C)
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
